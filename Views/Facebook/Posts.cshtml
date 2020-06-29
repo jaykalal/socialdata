@@ -1,0 +1,64 @@
+﻿@model Social_app.Models.SocialMedia.Facebook.posts
+
+@{
+    ViewBag.Title = "Posts";
+}
+
+<h2>Posts</h2>
+
+@*<p>@Html.Raw(ViewBag.JSON)</p>*@
+<div class="panel-group">
+
+    @foreach (var post in Model.feed.data)
+    {
+        <div class="panel-heading">@post.created_time - @post.story</div>
+        <div class="panel-body">
+            @if (!String.IsNullOrEmpty(post.message))
+            {
+                <p>@post.message</p>
+            }
+            @if (post.attachments != null)
+            {
+                if (post.attachments.data != null)
+                {
+                    foreach (var attachment in post.attachments.data)
+                    {
+                        if (attachment.media != null)
+                        {
+                            if (attachment.target != null)
+                            {
+                                <p><a href="@attachment.target.url"><img src="@attachment.media.image.src" width="450" /></a></p>
+                            }
+                            else
+                            {
+                                <p><img src="@attachment.media.image.src" width="450" /></p>
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+        <div class="panel-footer">
+            @if (post.likes != null)
+            {
+                if (post.likes.data != null)
+                {
+                    <p>Likes - @post.likes.data.Length</p>
+                }
+            }
+            @if (post.comments != null)
+            {
+                if (post.comments.data != null)
+                {
+                    <ul>
+                        @foreach (var comment in post.comments.data)
+                        {
+                            <li>@comment.message</li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+    }
+
+</div>
